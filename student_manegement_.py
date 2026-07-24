@@ -42,6 +42,27 @@ class StudentManagementSystem:
                 return 
         print("Student not found")
 
+    def update_student(self):
+        update_id = int(input("Enter the Update ID:"))
+
+        for student in self.students:
+            if update_id == student.student_id:
+                new_name = input("Enter the New name:")
+                new_age = int(input("Enter the New age:"))
+                new_course = input("Enter the New course:")
+                new_department = input("Enter the New department:")
+
+                student.student_name = new_name
+                student.age = new_age
+                student.course = new_course
+                student.department = new_department
+
+                print("Student updated successfully.")
+                student.display_details()
+                return
+            
+        print("Student not found")
+
 
     def view_students(self):
         if len(self.students) == 0:
@@ -57,8 +78,9 @@ while True:
     print("\n ==Student Management System ==")
     print("1. Add Student")
     print("2. View Students")
-    print("3. search Student")
-    print("4. Exit")
+    print("3. Search Student")
+    print("4. Update Student")
+    print("5. Exit")
 
     choice = input("Enter your choice:")
 
@@ -70,8 +92,9 @@ while True:
 
     elif choice == "3":
         sms.search_student()
-
     elif choice == "4":
+        sms.update_student()
+    elif choice == "5":
         print("Thank you!")
         break
     else:
