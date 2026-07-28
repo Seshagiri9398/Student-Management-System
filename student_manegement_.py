@@ -65,14 +65,14 @@ class StudentManagementSystem:
 
     def delete_student(self):
 
-        delete_id = int(input("Enter Student to Delete:"))
+        delete_id = int(input("Enter Student ID to Delete:"))
 
         for student in self.students:
             if delete_id == student.student_id:
                 self.students.remove(student)
                 print("Student Delete Successfully.")
                 return
-
+        print("No Student Found")
 
 
     def view_students(self):
