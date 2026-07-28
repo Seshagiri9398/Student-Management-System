@@ -21,11 +21,11 @@ class StudentManagementSystem:
 
 
     def add_student(self):
-        student_id = int(input("Enter student id:"))
-        student_name = input("enter the student name:")
-        age = int(input("Enter the age:"))
-        course = input("Enter your course:")
-        department = input("Enter the department:")
+        student_id = int(input("Enter Student Id:"))
+        student_name = input("Enter Student Name:")
+        age = int(input("Enter Student Age:"))
+        course = input("Enter Student Course:")
+        department = input("Enter Student Department:")
 
         student = Student(student_id,student_name,age,course,department)
 
@@ -33,7 +33,7 @@ class StudentManagementSystem:
         print("student added Successfully ")
 
     def search_student(self):
-        search_id = int(input("Enter the Search ID:"))
+        search_id = int(input("Enter Student ID to Search:"))
 
 
         for student in self.students:
@@ -43,30 +43,41 @@ class StudentManagementSystem:
         print("Student not found")
 
     def update_student(self):
-        update_id = int(input("Enter the Update ID:"))
+        update_id = int(input("Enter Student ID to Update:"))
 
         for student in self.students:
             if update_id == student.student_id:
-                new_name = input("Enter the New name:")
-                new_age = int(input("Enter the New age:"))
-                new_course = input("Enter the New course:")
-                new_department = input("Enter the New department:")
+                new_name = input("Enter New Name:")
+                new_age = int(input("Enter New Age:"))
+                new_course = input("Enter New Course:")
+                new_department = input("Enter New Department:")
 
                 student.student_name = new_name
                 student.age = new_age
                 student.course = new_course
                 student.department = new_department
 
-                print("Student updated successfully.")
+                print("Student Updated Successfully.")
                 student.display_details()
                 return
             
-        print("Student not found")
+        print("Student Not Found")
+
+    def delete_student(self):
+
+        delete_id = int(input("Enter Student to Delete:"))
+
+        for student in self.students:
+            if delete_id == student.student_id:
+                self.students.remove(student)
+                print("Student Delete Successfully.")
+                return
+
 
 
     def view_students(self):
         if len(self.students) == 0:
-            print("no Student Found")
+            print("No Student Found")
         else:
             for student in self.students:
                 student.display_details()
@@ -80,9 +91,10 @@ while True:
     print("2. View Students")
     print("3. Search Student")
     print("4. Update Student")
-    print("5. Exit")
+    print("5. Delete Student")
+    print("6. Exit")
 
-    choice = input("Enter your choice:")
+    choice = input("Enter Your Choice:")
 
     if choice == "1":
         sms.add_student()
@@ -95,8 +107,10 @@ while True:
     elif choice == "4":
         sms.update_student()
     elif choice == "5":
-        print("Thank you!")
+        sms.delete_student()
+    elif choice == "6":
+        print("Thank You!")
         break
     else:
-        print("Invalid choice")
+        print("Invalid Choice")
 
