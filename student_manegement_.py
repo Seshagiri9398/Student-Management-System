@@ -19,6 +19,20 @@ class StudentManagementSystem:
     def __init__(self):
         self.students = []
 
+    def get_valid_age(self):
+        while True:
+            try:
+                age = int(input("Enter Student Age:"))
+
+                if age < 1 or age > 120:
+                    print("Invalid age. Age must be between 1 and 120.")
+                    continue
+
+                return age
+            
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
 
     def add_student(self):
         student_id = int(input("Enter Student Id:"))
@@ -30,13 +44,7 @@ class StudentManagementSystem:
                 return
         
         student_name = input("Enter Student Name:")
-        age = int(input("Enter Student Age:"))
-
-        #Validation Age
-        if age < 1 or age > 120:
-            print("Invalid age. Age must be between 1 and 120.")
-            return
-        
+        age = self.get_valid_age()
         course = input("Enter Student Course:")
         department = input("Enter Student Department:")
 
