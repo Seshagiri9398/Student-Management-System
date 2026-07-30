@@ -22,8 +22,21 @@ class StudentManagementSystem:
 
     def add_student(self):
         student_id = int(input("Enter Student Id:"))
+
+        #duplicate ID validation
+        for student in self.students:
+            if student_id == student.student_id:
+                print("Student ID already exists!")
+                return
+        
         student_name = input("Enter Student Name:")
         age = int(input("Enter Student Age:"))
+
+        #Validation Age
+        if age < 1 or age > 120:
+            print("Invalid age. Age must be between 1 and 120.")
+            return
+        
         course = input("Enter Student Course:")
         department = input("Enter Student Department:")
 
