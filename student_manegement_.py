@@ -1,4 +1,4 @@
-#step 1
+#Student Class
 class Student:
     def __init__(self,student_id,student_name,age,course,department):
         self.student_id = student_id
@@ -8,16 +8,41 @@ class Student:
         self.department = department
 
     def display_details(self):
-        print(f"Student ID: {self.student_id}")
-        print(f"Student Name: {self.student_name}")
-        print(f"Student Age: {self.age}")
-        print(f"Student Course: {self.course}")
-        print(f"Student Department:{self.department}")
+        print("\n-----Student Details-----")
+        print(f"Student ID         : {self.student_id}")
+        print(f"Student Name       : {self.student_name}")
+        print(f"Student Age        : {self.age}")
+        print(f"Student Course     : {self.course}")
+        print(f"Student Department : {self.department}")
 
+
+#Student Management System Class
 
 class StudentManagementSystem:
     def __init__(self):
         self.students = []
+
+    # Helper Methods
+
+    def get_valid_id(self):
+            while True:
+                try:
+                    student_id = int(input("Enter Student ID:"))
+    
+                    duplicate =False
+    
+                    for student in self.students:
+                        if student_id == student.student_id:
+                            print("Student ID already exists!")
+                            duplicate =True
+                            break
+    
+                    if duplicate:
+                        continue
+                    return student_id
+                
+                except ValueError:
+                    print("Invalid Input.Please enter a number.")
 
     def get_valid_age(self):
         while True:
@@ -25,7 +50,7 @@ class StudentManagementSystem:
                 age = int(input("Enter Student Age:"))
 
                 if age < 1 or age > 120:
-                    print("Invalid age. Age must be between 1 and 120.")
+                    print("Age must be between 1 and 120.")
                     continue
 
                 return age
@@ -34,24 +59,58 @@ class StudentManagementSystem:
                 print("Invalid input. Please enter a number.")
 
 
-    def add_student(self):
-        student_id = int(input("Enter Student Id:"))
+    def get_student_name(self):
+        while True:
+            student_name = input("Enter Student Name:").strip()
 
-        #duplicate ID validation
-        for student in self.students:
-            if student_id == student.student_id:
-                print("Student ID already exists!")
-                return
+            if not student_name:
+                print("Student name cannot be empty")
+                continue
+            return student_name
+
         
-        student_name = input("Enter Student Name:")
+    def get_course(self):
+        while True:
+            course = input("Enter Student Course:").strip()
+
+            if not course:
+                print("Course cannot be empty.")
+                continue
+            return course
+
+        
+    def get_department(self):
+        while True:
+            department = input("Enter Student Department:").strip()
+
+            if not department:
+                print("Department cannot be empty.")
+                continue
+            return department
+
+
+    # CRUD Operations
+
+    def add_student(self):
+
+        student_id = self.get_valid_id()
+        student_name = self.get_student_name()
         age = self.get_valid_age()
-        course = input("Enter Student Course:")
-        department = input("Enter Student Department:")
+        course = self.get_course()
+        department = self.get_department()
 
         student = Student(student_id,student_name,age,course,department)
 
         self.students.append(student)
-        print("student added Successfully ")
+        print("\nStudent added successfully.")
+
+
+    def view_students(self):
+            if len(self.students) == 0:
+                print("No student found")
+            else:
+                for student in self.students:
+                    student.display_details()
 
     def search_student(self):
         search_id = int(input("Enter Student ID to Search:"))
@@ -63,11 +122,14 @@ class StudentManagementSystem:
                 return 
         print("Student not found")
 
+
     def update_student(self):
         update_id = int(input("Enter Student ID to Update:"))
 
         for student in self.students:
-            if update_id == student.student_id:
+
+            if student.student_id == update_id:
+
                 new_name = input("Enter New Name:")
                 new_age = int(input("Enter New Age:"))
                 new_course = input("Enter New Course:")
@@ -78,11 +140,12 @@ class StudentManagementSystem:
                 student.course = new_course
                 student.department = new_department
 
-                print("Student Updated Successfully.")
+                print("\nStudent updated successfully.")
                 student.display_details()
                 return
             
         print("Student Not Found")
+
 
     def delete_student(self):
 
@@ -91,17 +154,10 @@ class StudentManagementSystem:
         for student in self.students:
             if delete_id == student.student_id:
                 self.students.remove(student)
-                print("Student Delete Successfully.")
+                print("Student delete successfully.")
                 return
-        print("No Student Found")
+        print("Student not found")
 
-
-    def view_students(self):
-        if len(self.students) == 0:
-            print("No Student Found")
-        else:
-            for student in self.students:
-                student.display_details()
 
     
 sms = StudentManagementSystem()
