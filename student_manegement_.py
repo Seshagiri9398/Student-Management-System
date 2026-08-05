@@ -87,7 +87,13 @@ class StudentManagementSystem:
                 print("Department cannot be empty.")
                 continue
             return department
+    def find_student_by_id(self,student_id):
 
+        for student in self.students:
+            if student.student_id == student_id:
+                return student
+        return None
+    
 
     # CRUD Operations
 
@@ -112,51 +118,54 @@ class StudentManagementSystem:
                 for student in self.students:
                     student.display_details()
 
+
     def search_student(self):
         search_id = int(input("Enter Student ID to Search:"))
 
+        student = self.find_student_by_id(search_id)
 
-        for student in self.students:
-            if search_id == student.student_id:
-                student.display_details()
-                return 
-        print("Student not found")
+        if student:
+            student.display_details()
+        else:
+            print("Student not found")
+
 
 
     def update_student(self):
         update_id = int(input("Enter Student ID to Update:"))
 
-        for student in self.students:
+        student = self.find_student_by_id(update_id)
 
-            if student.student_id == update_id:
+        if student is None:
+            print("Student not found.")
+            return 
+        
+        new_name = input("Enter New Name:")
+        new_age = int(input("Enter New Age:"))
+        new_course = input("Enter New Course:")
+        new_department = input("Enter New Department:")
 
-                new_name = input("Enter New Name:")
-                new_age = int(input("Enter New Age:"))
-                new_course = input("Enter New Course:")
-                new_department = input("Enter New Department:")
+        student.student_name = new_name
+        student.age = new_age
+        student.course = new_course
+        student.department = new_department
 
-                student.student_name = new_name
-                student.age = new_age
-                student.course = new_course
-                student.department = new_department
-
-                print("\nStudent updated successfully.")
-                student.display_details()
-                return
-            
-        print("Student Not Found")
+        print("\nStudent updated successfully.")
+        student.display_details()
 
 
     def delete_student(self):
 
         delete_id = int(input("Enter Student ID to Delete:"))
 
-        for student in self.students:
-            if delete_id == student.student_id:
-                self.students.remove(student)
-                print("Student delete successfully.")
-                return
-        print("Student not found")
+        student = self.find_student_by_id(delete_id)
+
+        if student is None:
+            print("Student not found.")
+            return
+   
+        self.students.remove(student)
+        print("Student delete successfully.")
 
 
     
