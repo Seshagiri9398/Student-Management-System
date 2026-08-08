@@ -93,6 +93,14 @@ class StudentManagementSystem:
             if student.student_id == student_id:
                 return student
         return None
+
+    def get_integer(self,message):
+        while True:
+            try:
+                number = int(input(message))
+                return number
+            except ValueError:
+                print("Invalid input. Please enter a number.")
     
 
     # CRUD Operations
@@ -120,7 +128,7 @@ class StudentManagementSystem:
 
 
     def search_student(self):
-        search_id = int(input("Enter Student ID to Search:"))
+        search_id = self.get_integer("Enter Student ID to Search:")
 
         student = self.find_student_by_id(search_id)
 
@@ -132,7 +140,7 @@ class StudentManagementSystem:
 
 
     def update_student(self):
-        update_id = int(input("Enter Student ID to Update:"))
+        update_id = self.get_integer("Enter Student ID to Update:")
 
         student = self.find_student_by_id(update_id)
 
@@ -140,10 +148,10 @@ class StudentManagementSystem:
             print("Student not found.")
             return 
         
-        new_name = input("Enter New Name:")
-        new_age = int(input("Enter New Age:"))
-        new_course = input("Enter New Course:")
-        new_department = input("Enter New Department:")
+        new_name = self.get_student_name()
+        new_age = self.get_valid_age()
+        new_course = self.get_course()
+        new_department = self.get_department()
 
         student.student_name = new_name
         student.age = new_age
@@ -156,16 +164,21 @@ class StudentManagementSystem:
 
     def delete_student(self):
 
-        delete_id = int(input("Enter Student ID to Delete:"))
+        delete_id = self.get_integer("Enter Student ID to Delete:")
 
         student = self.find_student_by_id(delete_id)
 
         if student is None:
             print("Student not found.")
             return
-   
-        self.students.remove(student)
-        print("Student delete successfully.")
+
+        conform = input("Are you sure you want to delete this student? (Y/N):")
+
+        if conform.upper() == "Y":
+            self.students.remove(student)
+            print("Student delete successfully.")
+        else:
+            print("Delete operation cancelled.")
 
 
     
