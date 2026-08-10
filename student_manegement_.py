@@ -87,6 +87,7 @@ class StudentManagementSystem:
                 print("Department cannot be empty.")
                 continue
             return department
+        
     def find_student_by_id(self,student_id):
 
         for student in self.students:
@@ -101,7 +102,27 @@ class StudentManagementSystem:
                 return number
             except ValueError:
                 print("Invalid input. Please enter a number.")
-    
+
+    def get_menu_choice(self):
+        while True:
+            choice = input("Enter Your Choice: ")
+
+            if choice not in ["1","2","3","4","5","6"]:
+                print("Invalid choice.")
+                continue
+            return choice
+
+    # ---User Interface---
+
+    def display_menu(self):
+        print("\n===Student Management System ===")
+        print("1. Add Student")
+        print("2. View Students")
+        print("3. Search Student")
+        print("4. Update Student")
+        print("5. Delete Student")
+        print("6. Exit")
+
 
     # CRUD Operations
 
@@ -181,19 +202,14 @@ class StudentManagementSystem:
             print("Delete operation cancelled.")
 
 
+# ---Main Program---
     
 sms = StudentManagementSystem()
 
 while True:
-    print("\n ==Student Management System ==")
-    print("1. Add Student")
-    print("2. View Students")
-    print("3. Search Student")
-    print("4. Update Student")
-    print("5. Delete Student")
-    print("6. Exit")
+    sms.display_menu()
 
-    choice = input("Enter Your Choice:")
+    choice = sms.get_menu_choice()
 
     if choice == "1":
         sms.add_student()
@@ -203,12 +219,15 @@ while True:
 
     elif choice == "3":
         sms.search_student()
+
     elif choice == "4":
         sms.update_student()
+
     elif choice == "5":
         sms.delete_student()
+
     elif choice == "6":
-        print("Thank You!")
+        print("\nThank You!")
         break
     else:
         print("Invalid Choice")
