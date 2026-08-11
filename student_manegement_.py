@@ -103,6 +103,19 @@ class StudentManagementSystem:
             except ValueError:
                 print("Invalid input. Please enter a number.")
 
+    def pause(self):
+        input("\nPress Enter to continue...")
+
+
+    def get_confirmation(self,message):
+        while True:
+            answer = input(message).strip().upper()
+
+            if answer in ["Y","YES","N","NO"]:
+                return answer
+            print("Invalid input. Please enter Y/Yes or N/No.")
+
+
     def get_menu_choice(self):
         while True:
             choice = input("Enter Your Choice: ")
@@ -137,15 +150,21 @@ class StudentManagementSystem:
         student = Student(student_id,student_name,age,course,department)
 
         self.students.append(student)
-        print("\nStudent added successfully.")
-
+        print(f"\nStudent {student_id} added successfully.")
+        self.pause()
 
     def view_students(self):
-            if len(self.students) == 0:
-                print("No student found")
-            else:
-                for student in self.students:
-                    student.display_details()
+            if not self.students:
+                print("\nNo students found.")
+                self.pause()
+                return 
+            
+            print(f"\nTotal Students: {len(self.students)}")
+
+            for student in self.students:
+                student.display_details()
+            self.pause()
+            
 
 
     def search_student(self):
@@ -155,8 +174,10 @@ class StudentManagementSystem:
 
         if student:
             student.display_details()
+            self.pause()
         else:
             print("Student not found")
+            self.pause()
 
 
 
@@ -165,22 +186,30 @@ class StudentManagementSystem:
 
         student = self.find_student_by_id(update_id)
 
-        if student is None:
+        if not student:
             print("Student not found.")
+            self.pause()
             return 
-        
-        new_name = self.get_student_name()
-        new_age = self.get_valid_age()
-        new_course = self.get_course()
-        new_department = self.get_department()
+        confirm = self.get_confirmation("Are you sure you want to update this student? (Y/N): ")
 
-        student.student_name = new_name
-        student.age = new_age
-        student.course = new_course
-        student.department = new_department
+        if confirm in ["Y","YES"]:
 
-        print("\nStudent updated successfully.")
-        student.display_details()
+            new_name = self.get_student_name()
+            new_age = self.get_valid_age()
+            new_course = self.get_course()
+            new_department = self.get_department()
+
+            student.student_name = new_name
+            student.age = new_age
+            student.course = new_course
+            student.department = new_department
+
+            print(f"\nStudent {update_id} updated successfully.")
+            student.display_details()
+            self.pause()
+        else:
+            print("\nUpdate operation cancelled.")
+            self.pause()
 
 
     def delete_student(self):
@@ -189,20 +218,24 @@ class StudentManagementSystem:
 
         student = self.find_student_by_id(delete_id)
 
-        if student is None:
-            print("Student not found.")
+        if not student:
+            print("\nStudent not found.")
+            self.pause()
             return
 
-        conform = input("Are you sure you want to delete this student? (Y/N):")
+        confirm = self.get_confirmation("Are you sure you want to delete this student? (Y/N):")
 
-        if conform.upper() == "Y":
+        if confirm in ["Y","Yes"]:
             self.students.remove(student)
-            print("Student delete successfully.")
+            print(f"Student {delete_id} deleted successfully.")
+            self.pause()
         else:
             print("Delete operation cancelled.")
+            self.pause()
 
 
 # ---Main Program---
+
     
 sms = StudentManagementSystem()
 
@@ -229,6 +262,4 @@ while True:
     elif choice == "6":
         print("\nThank You!")
         break
-    else:
-        print("Invalid Choice")
 
