@@ -1,4 +1,4 @@
-#Student Class
+# Student Class
 class Student:
     def __init__(self,student_id,student_name,age,course,department):
         self.student_id = student_id
@@ -16,7 +16,7 @@ class Student:
         print(f"Student Department : {self.department}")
 
 
-#Student Management System Class
+# Student Management System Class
 
 class StudentManagementSystem:
     def __init__(self):
@@ -125,7 +125,7 @@ class StudentManagementSystem:
                 continue
             return choice
 
-    # ---User Interface---
+    # User Interface
 
     def display_menu(self):
         print("\n===Student Management System ===")
@@ -225,16 +225,16 @@ class StudentManagementSystem:
 
         confirm = self.get_confirmation("Are you sure you want to delete this student? (Y/N):")
 
-        if confirm in ["Y","Yes"]:
+        if confirm in ["Y","YES"]:
             self.students.remove(student)
-            print(f"Student {delete_id} deleted successfully.")
+            print(f"\nStudent {delete_id} deleted successfully.")
             self.pause()
         else:
-            print("Delete operation cancelled.")
+            print("\nDelete operation cancelled.")
             self.pause()
 
 
-# ---Main Program---
+# Main Program
 
     
 sms = StudentManagementSystem()
