@@ -1,3 +1,7 @@
+import json
+
+FILE_NAME = "students_.json"
+
 # Student Class
 class Student:
     def __init__(self,student_id,student_name,age,course,department):
@@ -21,8 +25,52 @@ class Student:
 class StudentManagementSystem:
     def __init__(self):
         self.students = []
+        self.load_students()
 
     # Helper Methods
+
+    def save_students(self):
+            students_data = []
+    
+            for student in self.students:
+                student_data = {
+                    "student_id":student.student_id,
+                    "student_name":student.student_name,
+                    "age":student.age,
+                    "course":student.course,
+                    "department":student.department
+                }
+    
+                students_data.append(student_data)
+    
+            with open(FILE_NAME,"w") as file:
+                json.dump(students_data,file,indent=4)
+
+
+    def load_students(self):
+        try:
+            with open(FILE_NAME,"r") as file:
+                data = json.load(file)
+
+                for item in data:
+                    student = Student(
+                        item["student_id"],
+                        item["student_name"],
+                        item["age"],
+                        item["course"],
+                        item["department"]
+                    )
+
+                    self.students.append(student)
+        except FileNotFoundError:
+            self.students = []
+
+        except json.JSONDecodeError:
+            print("\nInvalid data in students.json.")
+            print("Starting with an empty student list.")
+            self.students = []
+
+
 
     def get_valid_id(self):
             while True:
@@ -103,6 +151,7 @@ class StudentManagementSystem:
             except ValueError:
                 print("Invalid input. Please enter a number.")
 
+
     def pause(self):
         input("\nPress Enter to continue...")
 
@@ -150,6 +199,8 @@ class StudentManagementSystem:
         student = Student(student_id,student_name,age,course,department)
 
         self.students.append(student)
+        self.save_students()
+
         print(f"\nStudent {student_id} added successfully.")
         self.pause()
 
@@ -204,6 +255,7 @@ class StudentManagementSystem:
             student.course = new_course
             student.department = new_department
 
+            self.save_students()
             print(f"\nStudent {update_id} updated successfully.")
             student.display_details()
             self.pause()
@@ -227,6 +279,8 @@ class StudentManagementSystem:
 
         if confirm in ["Y","YES"]:
             self.students.remove(student)
+            self.save_students()
+
             print(f"\nStudent {delete_id} deleted successfully.")
             self.pause()
         else:
