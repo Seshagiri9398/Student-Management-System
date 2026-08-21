@@ -1,0 +1,16 @@
+[
+    {
+        "student_id": 2,
+        "student_name": "dasu",
+        "age": 45,
+        "course": "agri",
+        "department": "ece"
+    },
+    {
+        "student_id": 3,
+        "student_name": "ravi",
+        "age": 24,
+        "course": "mba",
+        "department": "mag"
+    }
+]

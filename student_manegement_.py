@@ -1,4 +1,5 @@
 import json
+from database import add_student_to_db,get_all_students
 
 FILE_NAME = "students_.json"
 
@@ -135,6 +136,7 @@ class StudentManagementSystem:
                 print("Department cannot be empty.")
                 continue
             return department
+
         
     def find_student_by_id(self,student_id):
 
@@ -199,22 +201,33 @@ class StudentManagementSystem:
         student = Student(student_id,student_name,age,course,department)
 
         self.students.append(student)
+        add_student_to_db(student)
         self.save_students()
 
         print(f"\nStudent {student_id} added successfully.")
         self.pause()
 
     def view_students(self):
-            if not self.students:
-                print("\nNo students found.")
-                self.pause()
-                return 
-            
-            print(f"\nTotal Students: {len(self.students)}")
+        rows = get_all_students()
 
-            for student in self.students:
-                student.display_details()
+        if not rows:
+            print("\nNo students found.")
             self.pause()
+            return
+        print(f"\nTotal students:{len(rows)}")
+
+        for row in rows:
+            
+            student = Student(
+                row[0],
+                row[1],
+                row[2],
+                row[3],
+                row[4]
+            )
+
+            student.display_details()
+        self.pause()
             
 
 
