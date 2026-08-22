@@ -1,5 +1,5 @@
 import json
-from database import add_student_to_db,get_all_students
+from database import add_student_to_db,get_all_students,update_student_in_db
 
 FILE_NAME = "students_.json"
 
@@ -217,7 +217,7 @@ class StudentManagementSystem:
         print(f"\nTotal students:{len(rows)}")
 
         for row in rows:
-            
+
             student = Student(
                 row[0],
                 row[1],
@@ -267,6 +267,7 @@ class StudentManagementSystem:
             student.age = new_age
             student.course = new_course
             student.department = new_department
+            update_student_in_db(student)
 
             self.save_students()
             print(f"\nStudent {update_id} updated successfully.")

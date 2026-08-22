@@ -8,9 +8,9 @@
     },
     {
         "student_id": 3,
-        "student_name": "ravi",
+        "student_name": "potta",
         "age": 24,
-        "course": "mba",
-        "department": "mag"
+        "course": "mca",
+        "department": "ece"
     }
 ]

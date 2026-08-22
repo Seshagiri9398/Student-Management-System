@@ -56,6 +56,33 @@ def get_all_students():
     connection.close()
     return rows
 
+def update_student_in_db(student):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    query = """
+        UPDATE students
+        SET student_name = %s,
+        age = %s,
+        course = %s,
+        department = %s
+        WHERE student_id = %s
+    """
+
+    cursor.execute(
+            query,
+            (
+                student.student_name,
+                student.age,
+                student.course,
+                student.department,
+                student.student_id
+            )
+        )
+    connection.commit()
+    cursor.close()
+    connection.close()
+
 if __name__ == "__main__":
     connection = get_connection()
 
