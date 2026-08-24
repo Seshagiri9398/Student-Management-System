@@ -1,5 +1,5 @@
 import json
-from database import add_student_to_db,get_all_students,update_student_in_db
+from database import add_student_to_db,get_all_students,update_student_in_db,delete_student_in_db
 
 FILE_NAME = "students_.json"
 
@@ -273,7 +273,7 @@ class StudentManagementSystem:
             print(f"\nStudent {update_id} updated successfully.")
             student.display_details()
             self.pause()
-        else:
+        else: 
             print("\nUpdate operation cancelled.")
             self.pause()
 
@@ -293,6 +293,7 @@ class StudentManagementSystem:
 
         if confirm in ["Y","YES"]:
             self.students.remove(student)
+            delete_student_in_db(student)
             self.save_students()
 
             print(f"\nStudent {delete_id} deleted successfully.")

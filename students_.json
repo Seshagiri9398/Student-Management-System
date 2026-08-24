@@ -5,12 +5,5 @@
         "age": 45,
         "course": "agri",
         "department": "ece"
-    },
-    {
-        "student_id": 3,
-        "student_name": "potta",
-        "age": 24,
-        "course": "mca",
-        "department": "ece"
     }
 ]

@@ -38,6 +38,7 @@ def add_student_to_db(student):
     cursor.close()
     connection.close()
 
+
 def get_all_students():
     connection = get_connection()
     cursor = connection.cursor()
@@ -80,6 +81,25 @@ def update_student_in_db(student):
             )
         )
     connection.commit()
+    cursor.close()
+    connection.close()
+
+def delete_student_in_db(student):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    query = """
+        DELETE FROM students
+        WHERE student_id=%s
+    """
+
+    cursor.execute(
+        query,
+        (student.student_id,)
+    )
+
+    connection.commit()
+
     cursor.close()
     connection.close()
 
