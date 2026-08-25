@@ -103,9 +103,56 @@ def delete_student_in_db(student):
     cursor.close()
     connection.close()
 
+def check_student_id(student_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    query = """
+        SELECT student_id from students
+        WHERE student_id = %s
+    """
+    cursor.execute(
+        query,
+        (student_id,)
+    )
+
+    result = cursor.fetchone()
+
+    exist = False
+    if result:
+        exist = True
+
+    cursor.close()
+    connection.close()
+
+    return exist 
+
+def get_student_by_id(student_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    query = """
+        SELECT student_id,student_name,age,course,department
+        FROM students
+        WHERE student_id = %s
+    """
+    cursor.execute(
+        query,
+        (student_id,)
+    )
+
+    result = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return result
+ 
+
+
+
 if __name__ == "__main__":
     connection = get_connection()
 
     print("Database connection successful!")
-
     connection.close()

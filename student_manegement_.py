@@ -1,5 +1,5 @@
 import json
-from database import add_student_to_db,get_all_students,update_student_in_db,delete_student_in_db
+from database import add_student_to_db,get_all_students,update_student_in_db,delete_student_in_db,check_student_id,get_student_by_id
 
 FILE_NAME = "students_.json"
 
@@ -24,53 +24,8 @@ class Student:
 # Student Management System Class
 
 class StudentManagementSystem:
-    def __init__(self):
-        self.students = []
-        self.load_students()
 
     # Helper Methods
-
-    def save_students(self):
-            students_data = []
-    
-            for student in self.students:
-                student_data = {
-                    "student_id":student.student_id,
-                    "student_name":student.student_name,
-                    "age":student.age,
-                    "course":student.course,
-                    "department":student.department
-                }
-    
-                students_data.append(student_data)
-    
-            with open(FILE_NAME,"w") as file:
-                json.dump(students_data,file,indent=4)
-
-
-    def load_students(self):
-        try:
-            with open(FILE_NAME,"r") as file:
-                data = json.load(file)
-
-                for item in data:
-                    student = Student(
-                        item["student_id"],
-                        item["student_name"],
-                        item["age"],
-                        item["course"],
-                        item["department"]
-                    )
-
-                    self.students.append(student)
-        except FileNotFoundError:
-            self.students = []
-
-        except json.JSONDecodeError:
-            print("\nInvalid data in students.json.")
-            print("Starting with an empty student list.")
-            self.students = []
-
 
 
     def get_valid_id(self):
@@ -78,17 +33,14 @@ class StudentManagementSystem:
                 try:
                     student_id = int(input("Enter Student ID:"))
     
-                    duplicate =False
-    
-                    for student in self.students:
-                        if student_id == student.student_id:
-                            print("Student ID already exists!")
-                            duplicate =True
-                            break
-    
-                    if duplicate:
+                    find_student = check_student_id(student_id)
+
+                    if find_student:
+                        print("Student exists.Try another ID.")
                         continue
-                    return student_id
+                    else:
+                        print("Student does not exist.")
+                        return student_id
                 
                 except ValueError:
                     print("Invalid Input.Please enter a number.")
@@ -140,10 +92,20 @@ class StudentManagementSystem:
         
     def find_student_by_id(self,student_id):
 
-        for student in self.students:
-            if student.student_id == student_id:
-                return student
-        return None
+        row = get_student_by_id(student_id)
+
+        if not row:
+            return None
+        
+        student = Student(
+            row[0],
+            row[1],
+            row[2],
+            row[3],
+            row[4]
+        )
+        return student
+
 
     def get_integer(self,message):
         while True:
