@@ -1,7 +1,5 @@
-import json
 from database import add_student_to_db,get_all_students,update_student_in_db,delete_student_in_db,check_student_id,get_student_by_id
 
-FILE_NAME = "students_.json"
 
 # Student Class
 class Student:
@@ -25,8 +23,8 @@ class Student:
 
 class StudentManagementSystem:
 
-    # Helper Methods
 
+    # Helper Methods
 
     def get_valid_id(self):
             while True:
@@ -162,12 +160,11 @@ class StudentManagementSystem:
 
         student = Student(student_id,student_name,age,course,department)
 
-        self.students.append(student)
         add_student_to_db(student)
-        self.save_students()
 
         print(f"\nStudent {student_id} added successfully.")
         self.pause()
+
 
     def view_students(self):
         rows = get_all_students()
@@ -231,7 +228,6 @@ class StudentManagementSystem:
             student.department = new_department
             update_student_in_db(student)
 
-            self.save_students()
             print(f"\nStudent {update_id} updated successfully.")
             student.display_details()
             self.pause()
@@ -254,10 +250,7 @@ class StudentManagementSystem:
         confirm = self.get_confirmation("Are you sure you want to delete this student? (Y/N):")
 
         if confirm in ["Y","YES"]:
-            self.students.remove(student)
             delete_student_in_db(student)
-            self.save_students()
-
             print(f"\nStudent {delete_id} deleted successfully.")
             self.pause()
         else:

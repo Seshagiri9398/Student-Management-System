@@ -1,13 +1,17 @@
 import psycopg2
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def get_connection():
     connection = psycopg2.connect(
-        host="localhost",
-        database="student_management_db",
-        user="postgres",
-        password="seshu123",
-        port="5432"
-
+        host = os.getenv("DB_HOST"),
+        database = os.getenv("DB_NAME"),
+        user = os.getenv("DB_USER"),
+        password = os.getenv("DB_PASSWORD"),
+        port = os.getenv("DB_PORT")
+        
     )
 
     return connection
@@ -22,21 +26,26 @@ def add_student_to_db(student):
         VALUES (%s,%s,%s,%s,%s)
     """
 
-    cursor.execute(
-        query,
-        (
-            student.student_id,
-            student.student_name,
-            student.age,
-            student.course,
-            student.department
+    try:
+
+        cursor.execute(
+            query,
+            (
+                student.student_id,
+                student.student_name,
+                student.age,
+                student.course,
+                student.department
+            )
         )
-    )
 
-    connection.commit()
-
-    cursor.close()
-    connection.close()
+        connection.commit()
+    except Exception as e:
+        print("Database error:",e)
+        connection.rollback()
+    finally:
+        cursor.close()
+        connection.close()
 
 
 def get_all_students():
@@ -48,14 +57,19 @@ def get_all_students():
         FROM students
         ORDER BY student_id
     """
+    try:
 
-    cursor.execute(query)
+        cursor.execute(query)
 
-    rows = cursor.fetchall()
+        rows = cursor.fetchall()
+        return rows
+    except Exception as e:
+        print("Database error:",e)
+        connection.rollback()
+    finally:
+        cursor.close()
+        connection.close()
 
-    cursor.close()
-    connection.close()
-    return rows
 
 def update_student_in_db(student):
     connection = get_connection()
@@ -69,20 +83,28 @@ def update_student_in_db(student):
         department = %s
         WHERE student_id = %s
     """
+    try:
 
-    cursor.execute(
-            query,
-            (
-                student.student_name,
-                student.age,
-                student.course,
-                student.department,
-                student.student_id
+        cursor.execute(
+                query,
+                (
+                    student.student_name,
+                    student.age,
+                    student.course,
+                    student.department,
+                    student.student_id
+                )
             )
-        )
-    connection.commit()
-    cursor.close()
-    connection.close()
+        connection.commit()
+
+    except Exception as e:
+        print("Database error:",e)
+        connection.rollback()
+
+    finally:
+        cursor.close()
+        connection.close()
+
 
 def delete_student_in_db(student):
     connection = get_connection()
@@ -92,16 +114,22 @@ def delete_student_in_db(student):
         DELETE FROM students
         WHERE student_id=%s
     """
+    try:
 
-    cursor.execute(
-        query,
-        (student.student_id,)
-    )
+        cursor.execute(
+            query,
+            (student.student_id,)
+        )
 
-    connection.commit()
+        connection.commit()
 
-    cursor.close()
-    connection.close()
+    except Exception as e:
+        print("Database error:",e)
+        connection.rollback()
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def check_student_id(student_id):
     connection = get_connection()
@@ -111,19 +139,27 @@ def check_student_id(student_id):
         SELECT student_id from students
         WHERE student_id = %s
     """
-    cursor.execute(
-        query,
-        (student_id,)
-    )
-
-    result = cursor.fetchone()
 
     exist = False
-    if result:
-        exist = True
+    try:
 
-    cursor.close()
-    connection.close()
+        cursor.execute(
+            query,
+            (student_id,)
+        )
+
+        result = cursor.fetchone()
+
+        if result:
+           exist = True
+
+    except Exception as e:
+        print("Database error:",e)
+        connection.rollback()
+
+    finally:
+        cursor.close()
+        connection.close()
 
     return exist 
 
@@ -136,19 +172,26 @@ def get_student_by_id(student_id):
         FROM students
         WHERE student_id = %s
     """
-    cursor.execute(
-        query,
-        (student_id,)
-    )
 
-    result = cursor.fetchone()
-
-    cursor.close()
-    connection.close()
+    result = None
     
+    try:
+
+        cursor.execute(
+            query,
+            (student_id,)
+        )
+
+        result = cursor.fetchone()
+    except Exception as e:
+        print("Database error:",e)
+        connection.rollback()
+    finally:
+        cursor.close()
+        connection.close()
+        
     return result
  
-
 
 
 if __name__ == "__main__":
