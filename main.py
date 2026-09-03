@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException,status
 from pydantic import BaseModel
 from student_manegement_ import Student
-from database import get_all_students,get_student_by_id,add_student_to_db,update_student_in_db
+from database import get_all_students,get_student_by_id,add_student_to_db,update_student_in_db,delete_student_in_db
 
 
 app = FastAPI()
@@ -58,3 +58,13 @@ def update_student(student : StudentUpdate,student_id : int):
 
     update_student_in_db(updated_student)
     return {"message":"student updated successfully"}
+
+
+@app.delete("/students/{student_id}")
+def delete_student(student_id : int):
+    result = get_student_by_id(student_id)
+
+    if not result:
+        raise HTTPException(status_code= 404, detail= "student not found")
+    delete_student_in_db(student_id)
+    return {"message" : "student deleted successfully"}

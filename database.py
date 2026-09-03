@@ -106,7 +106,7 @@ def update_student_in_db(student):
         connection.close()
 
 
-def delete_student_in_db(student):
+def delete_student_in_db(student_id):
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -118,7 +118,7 @@ def delete_student_in_db(student):
 
         cursor.execute(
             query,
-            (student.student_id,)
+            (student_id,)
         )
 
         connection.commit()
