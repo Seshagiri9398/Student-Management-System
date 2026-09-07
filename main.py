@@ -1,37 +1,22 @@
 from fastapi import FastAPI, HTTPException,status
-from pydantic import BaseModel
-from student_manegement_ import Student
-from database import get_all_students,get_student_by_id,add_student_to_db,update_student_in_db,delete_student_in_db,SessionLocal
+
+from database import SessionLocal
 from models import Student
+from schemas import StudentCreate, StudentUpdate, StudentResponse
 
 app = FastAPI()
 
-class StudentCreate(BaseModel):
-    student_id : int
-    student_name : str
-    age : int
-    course : str
-    department : str
 
-class StudentUpdate(BaseModel):
-    student_name : str
-    age : int
-    course : str
-    department : str
-
-
-@app.get("/")
-def home():
-    return {"message": "Student Management API is running"}
-    
-@app.get("/students")
+#GET ALL STUDENTS
+@app.get("/students",response_model=list[StudentResponse])
 def get_students():
     db = SessionLocal()
     result = db.query(Student).all()
     db.close()
     return result
 
-@app.get("/students/{student_id}")
+#GET STUDENT BY ID
+@app.get("/students/{student_id}",response_model=StudentResponse)
 def get_student(student_id : int):
     db = SessionLocal()
     result = db.query(Student).filter(Student.student_id == student_id).first()
@@ -40,12 +25,12 @@ def get_student(student_id : int):
         raise HTTPException(status_code= 404, detail= "student not found")
     return result
 
-@app.post("/students",status_code=status.HTTP_201_CREATED)
+#CREATE STUDENT
+@app.post("/students",status_code=status.HTTP_201_CREATED,response_model=StudentResponse)
 def create_student(student: StudentCreate):
     db = SessionLocal()
 
     new_student = Student(
-        student_id = student.student_id,
         student_name = student.student_name,
         age = student.age,
         course = student.course,
@@ -60,8 +45,8 @@ def create_student(student: StudentCreate):
     return new_student
 
 
-
-@app.put("/students/{student_id}")
+#UPDATE STUDENT
+@app.put("/students/{student_id}",response_model=StudentResponse)
 def update_student(student : StudentUpdate,student_id : int):
     db = SessionLocal()
     result = db.query(Student).filter(Student.student_id == student_id).first()
@@ -78,7 +63,7 @@ def update_student(student : StudentUpdate,student_id : int):
 
     return result
 
-
+#DELETE STUDENT
 @app.delete("/students/{student_id}")
 def delete_student(student_id : int):
     db = SessionLocal()
