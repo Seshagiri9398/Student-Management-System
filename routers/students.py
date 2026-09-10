@@ -1,5 +1,6 @@
-from fastapi import APIRouter , Depends, HTTPException, status
+from fastapi import APIRouter , Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
+from typing import Literal
 
 from database import get_db
 from models import Student
@@ -9,10 +10,34 @@ router = APIRouter()
 
 #GET ALL STUDENTS
 @router.get("/students",response_model=list[StudentResponse])
-def get_students(db: Session = Depends(get_db)):
-    result = db.query(Student).all()
+def get_students(
+    page: int = Query(1,ge=1), 
+    limit: int = Query(10,ge=1, le=100),
+    sort_by: Literal["student_id", "student_name"] = Query("student_id"),
+    order: Literal["asc","desc"] = Query("asc"),
+    db: Session = Depends(get_db)
+    ):
+
+    offset = (page - 1) * limit
+
+    query = db.query(Student)
+
+
+    if sort_by == "student_name":
+        column = Student.student_name
+    else:
+        column = Student.student_id
+
+    if order == "desc":
+        query = query.order_by(column.desc())
+    else:
+        query = query.order_by(column.asc())
+
+
+    result = (query.offset(offset).limit(limit).all())
 
     return result
+    
 
 
 # SEARCH STUDENTS BY NAME
@@ -96,5 +121,5 @@ def delete_student(student_id : int, db: Session = Depends(get_db)):
         db.rollback()
         raise
 
-    return result
+    return {"message": "Student deleted successfully"}
 
